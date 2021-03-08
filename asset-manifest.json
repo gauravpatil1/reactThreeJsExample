@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/reactThreeJsExample/static/css/main.8453e750.chunk.css",
+    "main.js": "/reactThreeJsExample/static/js/main.a7864ea5.chunk.js",
+    "main.js.map": "/reactThreeJsExample/static/js/main.a7864ea5.chunk.js.map",
+    "runtime-main.js": "/reactThreeJsExample/static/js/runtime-main.96ff6e6f.js",
+    "runtime-main.js.map": "/reactThreeJsExample/static/js/runtime-main.96ff6e6f.js.map",
+    "static/js/2.973d1e23.chunk.js": "/reactThreeJsExample/static/js/2.973d1e23.chunk.js",
+    "static/js/2.973d1e23.chunk.js.map": "/reactThreeJsExample/static/js/2.973d1e23.chunk.js.map",
+    "static/js/3.e029ba27.chunk.js": "/reactThreeJsExample/static/js/3.e029ba27.chunk.js",
+    "static/js/3.e029ba27.chunk.js.map": "/reactThreeJsExample/static/js/3.e029ba27.chunk.js.map",
+    "index.html": "/reactThreeJsExample/index.html",
+    "static/css/main.8453e750.chunk.css.map": "/reactThreeJsExample/static/css/main.8453e750.chunk.css.map",
+    "static/js/2.973d1e23.chunk.js.LICENSE.txt": "/reactThreeJsExample/static/js/2.973d1e23.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.96ff6e6f.js",
+    "static/js/2.973d1e23.chunk.js",
+    "static/css/main.8453e750.chunk.css",
+    "static/js/main.a7864ea5.chunk.js"
+  ]
+}
