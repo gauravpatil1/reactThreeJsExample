@@ -8,7 +8,7 @@ import {
   RGBFormat,
   LinearMipmapLinearFilter,
 } from "three";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, TrackballControls } from "@react-three/drei";
 
 const CameraControls = () => {
   const {
@@ -71,11 +71,19 @@ function Sphere({ position, rotation, args }) {
 function App() {
   return (
     <>
-      <Canvas>
+      <Canvas colorManagement>
         {/* <OrbitControls /> */}
-        <CameraControls />
+        <TrackballControls />
+        {/* <CameraControls /> */}
         <Sphere position={[0, 0, 0]} rotation={[0, 0, 0]} args={[2, 32, 32]} />
         <Sphere position={[10, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
+        <Sphere position={[20, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
+        <Sphere position={[30, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
+        <Sphere position={[40, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
+        <Sphere position={[50, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
+        <Sphere position={[60, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
+        <Sphere position={[70, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
+        <Sphere position={[80, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
         <SkyBox />
       </Canvas>
     </>
