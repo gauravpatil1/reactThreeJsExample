@@ -1,97 +1,82 @@
-import React, { uesRef, useRef, useState } from "react";
-import "./App.scss";
-
-import { Canvas, useFrame } from "react-three-fiber";
+import React, { useRef, useEffect } from "react";
+import "./App.css";
+import { Canvas, extend, useThree, useFrame } from "react-three-fiber";
 import {
-  softShadows,
-  MeshWobbleMaterial,
-  OrbitControls,
-} from "@react-three/drei";
-import { useSpring, a } from "react-spring/three";
+  CubeTextureLoader,
+  CubeCamera,
+  WebGLCubeRenderTarget,
+  RGBFormat,
+  LinearMipmapLinearFilter,
+} from "three";
+import { OrbitControls } from "@react-three/drei";
 
-softShadows();
-
-const SpinningMesh = ({ position, args, color, speed, factor }) => {
-  const mesh = useRef(null);
-  useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.01));
-  const [expand, setExpand] = useState(false);
-  const props = useSpring({
-    scale: expand ? [1.4, 1.1, 1.4] : [1, 1, 1],
-  });
+const CameraControls = () => {
+  const {
+    camera,
+    gl: { domElement },
+  } = useThree();
+  const controls = useRef();
+  useFrame(() => controls.current.update());
   return (
-    <a.mesh
-      onClick={() => setExpand(!expand)}
-      scale={props.scale}
-      castShadow
-      ref={mesh}
-      position={position}
-    >
-      <boxBufferGeometry attach="geometry" args={args} />
-      <MeshWobbleMaterial
-        speed={speed}
-        factor={factor}
-        attach="material"
-        color={color}
-      />
-    </a.mesh>
+    <OrbitControls
+      ref={controls}
+      args={[camera, domElement]}
+      autoRotate={true}
+      enableZoom={true}
+    />
   );
 };
+
+function SkyBox() {
+  const { scene } = useThree();
+  const loader = new CubeTextureLoader();
+  const texture = loader.load([
+    "/1.jpg",
+    "/2.jpg",
+    "/3.jpg",
+    "/4.jpg",
+    "/5.jpg",
+    "/6.jpg",
+  ]);
+  scene.background = texture;
+  return null;
+}
+
+function Sphere({ position, rotation, args }) {
+  const { scene, gl } = useThree();
+  const cubeRenderTarget = new WebGLCubeRenderTarget(256, {
+    format: RGBFormat,
+    generateMipmaps: true,
+    minFilter: LinearMipmapLinearFilter,
+  });
+  const cubeCamera = new CubeCamera(1, 1000, cubeRenderTarget);
+  cubeCamera.position.set(position[0], position[1], position[2]);
+  scene.add(cubeCamera);
+  useFrame(() => cubeCamera.update(gl, scene));
+
+  return (
+    <mesh visible position={position} rotation={rotation} castShadow>
+      <sphereGeometry attach="geometry" args={args} />
+      <meshBasicMaterial
+        attach="material"
+        envMap={cubeCamera.renderTarget.texture}
+        color="white"
+        roughness={0.1}
+        metalness={1}
+      />
+    </mesh>
+  );
+}
 
 function App() {
   return (
     <>
-      <Canvas
-        shadowMap
-        colorManagement
-        camera={{ position: [-5, 2, 10], fov: 60 }}
-      >
-        <ambientLight intensity={0.3} />
-        <pointLight position={[-10, 0, -20]} intensity={0.5} />
-        <pointLight position={[0, -10, 0]} intensity={1.5} />
-        <directionalLight
-          castShadow
-          position={[0, 10, 0]}
-          intensity={1.5}
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-        />
-
-        <group>
-          <mesh
-            receiveShadow
-            rotation={[-Math.PI / 2, 0, 0]}
-            position={[0, -3, 0]}
-          >
-            <planeBufferGeometry attach="geometry" args={[100, 100]} />
-            <shadowMaterial attach="material" opacity={0.3} />
-          </mesh>
-          <SpinningMesh
-            position={[0, 1, 0]}
-            args={[3, 2, 1]}
-            color="lightblue"
-            speed={2}
-            factor={0.6}
-          />
-          <SpinningMesh
-            position={[-2, 1, -5]}
-            color="pink"
-            speed={5}
-            factor={0.6}
-          />
-          <SpinningMesh
-            position={[5, 1, -2]}
-            color="pink"
-            speed={5}
-            factor={0.6}
-          />
-        </group>
-
-        <OrbitControls />
+      <Canvas>
+        {/* <OrbitControls /> */}
+        <CameraControls />
+        <Sphere position={[0, 0, 0]} rotation={[0, 0, 0]} args={[2, 32, 32]} />
+        <Sphere position={[10, 0, 0]} rotation={[0, 0, 0]} args={[5, 32, 32]} />
+        <SkyBox />
       </Canvas>
     </>
   );
